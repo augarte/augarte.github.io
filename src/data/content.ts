@@ -16,7 +16,6 @@ export interface Experience {
 interface Project {
   id: string;
   title: string;
-  category: string;
   summary: string;
   tags: string[];
   description: string;
@@ -32,11 +31,16 @@ interface Project {
   };
 }
 
+export const appContributions = [
+  { name: "Zara", contribution: "iOS features and codebase modernization" },
+  { name: "Inditex", contribution: "Shared iOS components across brands" },
+  { name: "Iberostar", contribution: "iOS and Android app development" },
+];
+
 export const projects: Project[] = [
   {
     id: "breezepilot",
     title: "BreezePilot",
-    category: "Featured project / Open source",
     summary: "Control your AC from your iPhone’s Home Screen.",
     tags: ["Open source", "SwiftUI", "WidgetKit"],
     description:
@@ -55,7 +59,6 @@ export const projects: Project[] = [
   {
     id: "simple-line-chart",
     title: "Simple Line Chart",
-    category: "Open source / UIKit",
     summary: "UIKit line charts with custom styling and time-range filters.",
     tags: ["Open source", "UIKit"],
     description:

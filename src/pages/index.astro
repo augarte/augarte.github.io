@@ -1,6 +1,6 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import { projects, experience, socials } from "../data/content";
+import { appContributions, projects, experience, socials } from "../data/content";
 import "../styles/portfolio.css";
 ---
 
@@ -46,56 +46,60 @@ import "../styles/portfolio.css";
           <p class="chapter-label">02 / Work</p>
           <h2 class="chapter-title" id="work-title">What I build.</h2>
 
-          {projects.map((project, index) => (
-            <article
-              class="featured-project"
-              id={`project-${project.id}`}
-              aria-labelledby={`project-title-${project.id}`}
-              hidden={index !== 0}
-            >
-              <div class="feature-copy">
-                <p class="chapter-label">{project.category}</p>
-                <h3 id={`project-title-${project.id}`} tabindex="-1">{project.title}</h3>
-                <p class="feature-description">{project.description}</p>
-                {project.note && <p class="feature-note">{project.note}</p>}
-              </div>
-              <figure>
-                <div class="feature-art">
-                  <img
-                    src={project.screenshot.src}
-                    alt={project.screenshot.alt}
-                    width={project.screenshot.width}
-                    height={project.screenshot.height}
-                    data-crop={project.screenshot.crop}
-                    loading="lazy"
-                    decoding="async"
-                  />
-                </div>
-                <figcaption class="feature-caption">{project.screenshot.caption}</figcaption>
-              </figure>
-            </article>
-          ))}
+          <section class="work-contributions" aria-labelledby="work-contributions-title">
+            <h3 class="chapter-label" id="work-contributions-title">Apps I’ve contributed to</h3>
+            <ul role="list">
+              {appContributions.map(({ name, contribution }) => (
+                <li>
+                  <strong>{name}</strong>
+                  <span>{contribution}</span>
+                </li>
+              ))}
+            </ul>
+          </section>
 
-          <ul class="project-picker" role="list" aria-label="Projects">
-            {projects.map((project, index) => (
+          <h3 class="chapter-label work-projects-title" id="work-projects-title">Open source projects</h3>
+          <ul class="project-list" role="list" aria-labelledby="work-projects-title">
+            {projects.map((project) => (
               <li>
-                <button
-                  type="button"
-                  aria-controls={`project-${project.id}`}
-                  aria-pressed={index === 0}
-                  aria-labelledby={`project-choice-${project.id}`}
-                  aria-describedby={`project-summary-${project.id}`}
-                >
-                  <span class="project-picker-title" id={`project-choice-${project.id}`}>{project.title}</span>
-                  <span id={`project-summary-${project.id}`}>
-                    <span class="project-picker-summary">{project.summary}</span>
-                    <span class="project-picker-tags">
-                      {project.tags.map((tag) => <span>{tag}</span>)}
+                <details class="project-entry" name="projects" id={`project-${project.id}`} open={project.id === "breezepilot"}>
+                  <summary>
+                    <span class="project-heading">
+                      <span class="project-title">{project.title}</span>
+                      <span class="disclosure-toggle" aria-hidden="true"></span>
                     </span>
-                  </span>
-                </button>
+                    <span class="project-overview">
+                      <span class="project-summary">{project.summary}</span>
+                      <span class="project-tags">
+                        {project.tags.map((tag) => <span>{tag}</span>)}
+                      </span>
+                    </span>
+                  </summary>
+                  <div class="disclosure-content">
+                    <div class="project-detail">
+                      <div>
+                        <p class="project-description">{project.description}</p>
+                        {project.note && <p class="project-note">{project.note}</p>}
+                      </div>
+                      <figure>
+                        <div class="project-art">
+                          <img
+                            src={project.screenshot.src}
+                            alt={project.screenshot.alt}
+                            width={project.screenshot.width}
+                            height={project.screenshot.height}
+                            data-crop={project.screenshot.crop}
+                            loading="lazy"
+                            decoding="async"
+                          />
+                        </div>
+                        <figcaption class="project-caption">{project.screenshot.caption}</figcaption>
+                      </figure>
+                    </div>
+                  </div>
+                </details>
                 {project.href && (
-                  <a class="chapter-link" href={project.href} aria-label={`View ${project.title} on GitHub`}>
+                  <a class="chapter-link project-repo" href={project.href} aria-label={`View ${project.title} on GitHub`}>
                     GitHub <span aria-hidden="true">↗</span>
                   </a>
                 )}
@@ -111,33 +115,36 @@ import "../styles/portfolio.css";
             <p class="chapter-label">03 / Experience</p>
             <h2 class="chapter-title" id="experience-title">From idea<br />to app.</h2>
             <p class="chapter-lead">
-              I’m an iOS engineer working on native apps and the architecture behind them.
-              Much of my work has been on retail apps that ship every week.
+              I’m an iOS engineer who builds apps that stay easy to extend as they grow.
+              I’ve shipped features across Inditex’s retail apps, which serve millions of shoppers.
             </p>
           </div>
 
           <div class="experience-history">
             {experience.map((job) => (
-              <details class="experience-entry">
+              <details class="experience-entry" name="experience">
                 <summary>
                   <span>
                     <span class="experience-company">{job.company}</span>
                     <span class="experience-role">{job.roles[0].title}</span>
                   </span>
                   <span class="experience-period">{job.period}</span>
+                  <span class="disclosure-toggle" aria-hidden="true"></span>
                 </summary>
-                <div class="experience-detail">
-                  <p class="chapter-label">{job.location}</p>
-                  {job.roles.map((role) => (
-                    <div class="experience-role-detail">
-                      <h3>{role.title}</h3>
-                      <p class="experience-role-meta">{role.period} · {role.type}</p>
-                      <p>{role.description}</p>
-                      <ul>
-                        {role.highlights.map((highlight) => <li>{highlight}</li>)}
-                      </ul>
-                    </div>
-                  ))}
+                <div class="disclosure-content">
+                  <div class="experience-detail">
+                    <p class="chapter-label">{job.location}</p>
+                    {job.roles.map((role) => (
+                      <div class="experience-role-detail">
+                        <h3>{role.title}</h3>
+                        <p class="experience-role-meta">{role.period} · {role.type}</p>
+                        <p>{role.description}</p>
+                        <ul>
+                          {role.highlights.map((highlight) => <li>{highlight}</li>)}
+                        </ul>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </details>
             ))}
@@ -146,10 +153,10 @@ import "../styles/portfolio.css";
       </section>
 
       <section class="chapter chapter-contact" id="contact" data-chapter data-dark aria-labelledby="contact-title">
+        <p class="chapter-inner chapter-label">04 / Contact</p>
         <div class="chapter-inner">
-          <p class="chapter-label">04 / Contact</p>
           <h2 class="chapter-title" id="contact-title">Let’s talk.</h2>
-          <p class="chapter-lead">Open to iOS consulting, feature ownership, and long-term product collaborations.</p>
+          <p class="chapter-lead">Need a hand? I can help you build something new or improve what’s already there.</p>
           <a class="contact-email" href={`mailto:${socials.email}?subject=iOS%20Project%20Inquiry`}>{socials.email}</a>
           <div class="contact-links">
             <a class="chapter-link" href={socials.github}>GitHub <span aria-hidden="true">↗</span></a>
@@ -159,10 +166,7 @@ import "../styles/portfolio.css";
           </div>
         </div>
         <footer class="portfolio-footer">
-          <div class="footer-brand">
-            <img src="/wordmark.svg" alt="Aimar Ugarte" width="339" height="146" />
-            <span>© {new Date().getFullYear()}</span>
-          </div>
+          <span class="chapter-label">Aimar Ugarte</span>
           <a class="chapter-link" href="#intro">Back to top <span aria-hidden="true">↑</span></a>
         </footer>
       </section>
@@ -205,26 +209,6 @@ import "../styles/portfolio.css";
     updateNavigation();
     window.addEventListener("scroll", scheduleUpdate, { passive: true });
     window.addEventListener("resize", scheduleUpdate);
-  }
-
-  const projectButtons = document.querySelectorAll<HTMLButtonElement>(".project-picker button");
-  for (const button of projectButtons) {
-    button.addEventListener("click", () => {
-      for (const choice of projectButtons) {
-        const selected = choice === button;
-        choice.setAttribute("aria-pressed", String(selected));
-        const panel = document.getElementById(choice.getAttribute("aria-controls") ?? "");
-        panel?.toggleAttribute("hidden", !selected);
-      }
-
-      const panel = document.getElementById(button.getAttribute("aria-controls") ?? "");
-      const heading = panel?.querySelector("h3");
-      const headerBottom = header?.getBoundingClientRect().bottom ?? 0;
-      if (heading && heading.getBoundingClientRect().top < headerBottom) {
-        heading.focus({ preventScroll: true });
-        heading.scrollIntoView({ block: "start" });
-      }
-    });
   }
 
   const copyButton = document.querySelector<HTMLButtonElement>("[data-copy-email]");

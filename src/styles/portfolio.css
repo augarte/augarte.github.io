@@ -75,11 +75,13 @@ body:has(.portfolio)::before {
   text-underline-offset: 0.32em;
 }
 
-.portfolio-nav a:hover,
+.portfolio-nav a:is(:hover, :focus-visible),
 .portfolio-nav-links a[aria-current="location"],
-.chapter-link:hover,
-.contact-email:hover {
-  text-decoration: underline;
+button.chapter-link:is(:hover, :focus-visible),
+.project-entry summary:is(:hover, :focus-visible) .project-title,
+.project-entry[open] .project-title,
+.experience-entry summary:is(:hover, :focus-visible) .experience-company {
+  text-decoration: underline solid 1px;
 }
 
 .chapter-counter {
@@ -128,13 +130,14 @@ body:has(.portfolio)::before {
 }
 
 .intro-link {
+  --arrow-x: 0px;
+  --arrow-y: 2px;
   position: absolute;
   top: calc(var(--nav-height) + 0.85rem);
   right: var(--page-inset);
-  font-family: var(--font-mono);
 }
 
-.chapter-link span {
+.chapter-link > span[aria-hidden="true"] {
   font-size: 1.25em;
 }
 
@@ -161,50 +164,96 @@ body:has(.portfolio)::before {
   text-wrap: pretty;
 }
 
-.project-picker {
-  margin-top: clamp(1.5rem, 3vw, 2.5rem);
+.work-contributions {
+  margin-top: clamp(0.85rem, 2vw, 1.5rem);
+  padding-block: 0.5rem;
+  border-block: 1px solid #626262;
+}
+
+.work-contributions ul {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-top: 0.3rem;
+}
+
+.work-contributions li {
+  padding-inline-end: 0.5rem;
+  line-height: 1.3;
+}
+
+.work-contributions li + li {
+  border-inline-start: 1px solid #626262;
+  padding-inline-start: clamp(0.45rem, 1.5vw, 1.5rem);
+}
+
+.work-contributions span {
+  display: block;
+  margin-top: 0.15rem;
+  color: color-mix(in srgb, var(--type) 78%, var(--surface));
+  font-size: 0.8rem;
+}
+
+.work-projects-title {
+  margin-top: calc(var(--work-gap, clamp(1.5rem, 3vw, 2.5rem)) + 0.5rem);
+}
+
+.project-list {
+  margin-top: 0.4rem;
   border-top: 1px solid #626262;
 }
 
-.project-picker li {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-items: center;
-  gap: 0 1rem;
+.project-list > li {
+  position: relative;
   border-bottom: 1px solid #626262;
 }
 
-.project-picker button {
+.project-list > li:has(> .project-repo) {
+  --project-repo-space: 5.25rem;
+}
+
+.project-entry summary {
   display: grid;
-  grid-template-columns: clamp(9rem, 20vw, 18rem) minmax(0, 1fr);
-  align-items: center;
-  gap: 0.15rem 1rem;
+  grid-template-columns: clamp(9rem, 20vw, 18rem) minmax(0, 1fr) var(--project-repo-space, 0px);
+  align-items: start;
+  gap: 0.35rem clamp(0.5rem, 1.5vw, 1rem);
   min-height: 2.75rem;
-  padding: 0.8rem 0.15rem;
+  padding: 0.75rem 0.15rem;
   color: color-mix(in srgb, var(--type) 72%, var(--surface));
-  text-align: left;
   cursor: pointer;
+  list-style: none;
 }
 
-.project-picker-title {
-  font-size: 1rem;
+.project-heading {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.project-heading .disclosure-toggle {
+  flex: none;
+}
+
+.project-title {
+  font-size: clamp(1rem, 1.7vw, 1.35rem);
   font-weight: 600;
+  line-height: 1.25;
+  text-underline-offset: 0.28em;
 }
 
-.project-picker-summary {
+.project-summary {
   display: block;
   font-size: 0.875rem;
   line-height: 1.4;
 }
 
-.project-picker-tags {
+.project-tags {
   display: flex;
   flex-wrap: wrap;
   gap: 0.35rem;
   margin-top: 0.35rem;
 }
 
-.project-picker-tags > span {
+.project-tags > span {
   padding: 0.1rem 0.45rem;
   border: 1px solid #626262;
   border-radius: 0.25rem;
@@ -213,57 +262,43 @@ body:has(.portfolio)::before {
   line-height: 1.4;
 }
 
-.project-picker button:hover,
-.project-picker button[aria-pressed="true"] {
+.project-entry summary:is(:hover, :focus-visible),
+.project-entry[open] summary {
   color: var(--type);
 }
 
-.project-picker button:hover .project-picker-title,
-.project-picker button[aria-pressed="true"] .project-picker-title {
-  text-decoration: underline;
-  text-underline-offset: 0.28em;
+.project-entry summary:is(:hover, :focus-visible) {
+  background-color: color-mix(in srgb, var(--type) 6%, transparent);
 }
 
-.project-picker .chapter-link {
+.project-repo {
+  position: absolute;
+  inset: 0 0 auto auto;
   white-space: nowrap;
 }
 
-.featured-project {
+.project-detail {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
   gap: clamp(1.75rem, 5.5vw, 6.5rem);
   align-items: center;
-  margin-top: clamp(1.75rem, 3vw, 3rem);
+  padding-block: 0.2rem 0.85rem;
 }
 
-.featured-project[hidden] {
-  display: none;
-}
-
-.feature-copy h3 {
-  margin-top: 0.25em;
-  font-size: clamp(2.5rem, 6vw, 5.75rem);
-  font-weight: 700;
-  line-height: 0.95;
-  letter-spacing: -0.055em;
-  scroll-margin-top: calc(var(--nav-height) + 1rem);
-}
-
-.feature-description {
+.project-description {
   max-width: 36ch;
-  margin-top: 0.75rem;
   font-size: clamp(1rem, 1.75vw, 1.3rem);
   line-height: 1.5;
 }
 
-.feature-note {
+.project-note {
   max-width: 42ch;
   margin-top: 0.55rem;
   color: color-mix(in srgb, var(--type) 78%, var(--surface));
   line-height: 1.45;
 }
 
-.feature-art {
+.project-art {
   --art-width: 16rem;
   display: grid;
   place-items: center;
@@ -276,7 +311,7 @@ body:has(.portfolio)::before {
   background-size: 1.5rem 1.5rem;
 }
 
-.feature-art img {
+.project-art img {
   width: auto;
   height: auto;
   max-width: 100%;
@@ -285,19 +320,17 @@ body:has(.portfolio)::before {
   box-shadow: 0 1.1rem 3rem #0007;
 }
 
-.feature-art img[data-crop] {
+.project-art img[data-crop] {
   width: min(100%, var(--art-width));
   aspect-ratio: 1 / 1.1;
   object-fit: cover;
   object-position: center 26%;
 }
 
-.feature-caption {
+.project-caption {
   margin-top: 0.6rem;
   font-family: var(--font-mono);
-  font-size: 0.7rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+  font-size: 0.8rem;
 }
 
 @media (min-width: 48rem) {
@@ -311,22 +344,17 @@ body:has(.portfolio)::before {
     font-size: clamp(2.75rem, min(8vw, 10svh), 7.25rem);
   }
 
-  .featured-project,
-  .project-picker {
+  .work-contributions {
     margin-top: var(--work-gap);
   }
 
-  .feature-copy h3 {
-    font-size: clamp(2.25rem, min(5.5vw, 7svh), 5.75rem);
-  }
-
-  .feature-description {
+  .project-description {
     font-size: clamp(1rem, 2.15svh, 1.2rem);
     line-height: 1.45;
   }
 
-  .feature-art {
-    --art-width: min(29svh, 16rem);
+  .project-art {
+    --art-width: min(25svh, 16rem);
     padding: clamp(0.625rem, 1.5svh, 1.25rem);
   }
 }
@@ -360,25 +388,39 @@ body:has(.portfolio)::before {
   list-style: none;
 }
 
-.experience-entry summary::-webkit-details-marker {
+:is(.project-entry, .experience-entry) summary::-webkit-details-marker {
   display: none;
 }
 
-.experience-entry summary::after {
-  content: "+";
-  width: 1em;
-  line-height: 1;
-  font-size: 1.35rem;
-  text-align: center;
+.disclosure-toggle {
+  position: relative;
+  width: 1.35rem;
+  height: 1.35rem;
 }
 
-.experience-entry[open] summary::after {
-  content: "−";
+.disclosure-toggle::before,
+.disclosure-toggle::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 0.8rem;
+  height: 1.5px;
+  border-radius: 1px;
+  background: currentColor;
 }
 
-.experience-entry summary:hover .experience-company {
-  text-decoration: underline;
-  text-underline-offset: 0.25em;
+.disclosure-toggle::before {
+  rotate: 0deg;
+}
+
+.disclosure-toggle::after {
+  rotate: 90deg;
+}
+
+:is(.project-entry, .experience-entry)[open] .disclosure-toggle::before,
+:is(.project-entry, .experience-entry)[open] .disclosure-toggle::after {
+  rotate: 180deg;
 }
 
 .experience-company {
@@ -387,6 +429,7 @@ body:has(.portfolio)::before {
   font-weight: 600;
   line-height: 1.2;
   letter-spacing: -0.045em;
+  text-underline-offset: 0.25em;
 }
 
 .experience-role,
@@ -399,7 +442,6 @@ body:has(.portfolio)::before {
 
 .experience-period {
   padding-top: 0.2rem;
-  font-family: var(--font-mono);
   font-size: clamp(0.72rem, 1.25vw, 0.85rem);
   white-space: nowrap;
 }
@@ -433,19 +475,39 @@ body:has(.portfolio)::before {
 }
 
 .chapter-contact {
-  position: relative;
-  padding-bottom: 7rem;
+  grid-template-rows: auto 1fr auto;
+  row-gap: clamp(1.25rem, 3svh, 2rem);
+  padding-block-end: env(safe-area-inset-bottom, 0px);
+}
+
+.chapter-contact .chapter-inner {
+  align-self: center;
+}
+
+.chapter-contact .chapter-title {
+  margin-top: 0;
 }
 
 .contact-email {
+  position: relative;
   display: inline-block;
   max-width: 100%;
   margin-top: 1.75rem;
   font-size: clamp(1.15rem, 3.75vw, 3.2rem);
   font-weight: 600;
   letter-spacing: -0.05em;
-  text-underline-offset: 0.2em;
   overflow-wrap: anywhere;
+}
+
+.contact-email:is(:hover, :focus-visible)::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0.08em;
+  height: 5px;
+  background: currentColor;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 5'%3E%3Cpath d='M0 2.5C3.33 .2 6.67 .2 10 2.5S16.67 4.8 20 2.5' fill='none' stroke='black' stroke-width='1.35'/%3E%3C/svg%3E") left center / 20px 5px repeat-x;
+  pointer-events: none;
 }
 
 .contact-links {
@@ -464,27 +526,74 @@ body:has(.portfolio)::before {
 }
 
 .portfolio-footer {
-  position: absolute;
-  inset: auto var(--page-inset) 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 1rem;
+  width: min(100%, 90rem);
+  margin-inline: auto;
   border-top: 1px solid #626262;
-  padding-bottom: env(safe-area-inset-bottom, 0px);
+  padding-block: 0.85rem;
   font-size: 0.82rem;
 }
 
-.footer-brand {
-  display: flex;
-  align-items: flex-end;
-  gap: 0.75rem;
-  padding-block: 0.85rem;
+.portfolio-footer .chapter-link {
+  --arrow-x: 0px;
 }
 
-.footer-brand img {
-  width: 5.25rem;
-  height: auto;
+@media (prefers-reduced-motion: no-preference) {
+  .chapter-link > span[aria-hidden="true"] {
+    transition: transform 140ms ease-out;
+  }
+
+  .chapter-link:is(:hover, :focus-visible) > span[aria-hidden="true"] {
+    transform: translate(var(--arrow-x, 2px), var(--arrow-y, -2px));
+  }
+
+  .project-entry summary {
+    transition: background-color 140ms ease-out;
+  }
+
+  .disclosure-toggle::before,
+  .disclosure-toggle::after {
+    transition: rotate 180ms ease-out;
+  }
+
+  .project-entry[open] .project-detail,
+  .experience-entry[open] .experience-detail {
+    animation: disclosure-reveal 160ms ease-out;
+  }
+
+  @supports selector(::details-content) and (transition-behavior: allow-discrete) {
+    :is(.project-entry, .experience-entry)::details-content {
+      display: grid;
+      grid-template-rows: 0fr;
+      overflow: clip;
+      transition:
+        grid-template-rows 180ms cubic-bezier(0.2, 0.7, 0.3, 1),
+        content-visibility 180ms allow-discrete;
+    }
+
+    :is(.project-entry, .experience-entry)[open]::details-content {
+      grid-template-rows: 1fr;
+    }
+
+    .disclosure-content {
+      min-height: 0;
+      overflow: clip;
+    }
+  }
+}
+
+@keyframes disclosure-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(-0.25rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .visually-hidden {
@@ -497,10 +606,18 @@ body:has(.portfolio)::before {
 }
 
 @media (max-width: 47.99rem) {
-  .featured-project,
-  .project-picker button,
+  .project-detail,
   .chapter-experience .chapter-inner {
     grid-template-columns: minmax(0, 1fr);
+  }
+
+  .project-entry summary {
+    grid-template-columns: minmax(0, 1fr) var(--project-repo-space, 0px);
+  }
+
+  .project-overview {
+    grid-row: 2;
+    grid-column: 1 / -1;
   }
 }
 
@@ -514,7 +631,7 @@ body:has(.portfolio)::before {
     grid-row: 2;
   }
 
-  .experience-entry summary::after {
+  .experience-entry .disclosure-toggle {
     grid-column: 2;
     grid-row: 1;
   }

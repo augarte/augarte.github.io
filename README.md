@@ -15,7 +15,7 @@ Run `npm run build` to generate the static site in `dist/`. Run `npm run preview
 
 ## Site content and brand
 
-- Edit project descriptions, repository links, and experience in `src/data/content.ts`.
+- Edit app contributions, project descriptions, repository links, and experience in `src/data/content.ts`.
 - Keep project screenshots in `public/` and provide descriptive alt text.
 - `public/wordmark.svg` is the full stacked logo. `public/favicon.svg` is the cropped tile, with an ICO fallback for smaller browser icons. `public/social-preview.png` uses the wordmark for link previews.
 
