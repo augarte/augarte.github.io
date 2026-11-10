@@ -2,9 +2,9 @@ name: Portfolio
 
 on:
   push:
-    branches: [develop, master]
+    branches: [main]
   pull_request:
-    branches: [master]
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -21,13 +21,13 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run build
-      - if: github.ref == 'refs/heads/master'
+      - if: github.ref == 'refs/heads/main'
         uses: actions/upload-pages-artifact@v4
         with:
           path: dist
 
   deploy:
-    if: github.ref == 'refs/heads/master'
+    if: github.ref == 'refs/heads/main'
     needs: build
     runs-on: ubuntu-latest
     permissions:

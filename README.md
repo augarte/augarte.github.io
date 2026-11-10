@@ -21,6 +21,6 @@ Run `npm run build` to generate the static site in `dist/`. Run `npm run preview
 
 ## Publishing
 
-The production address is [augarte.github.io](https://augarte.github.io/). In the repository’s **Settings → Pages**, set the source to **GitHub Actions** before releasing the Astro version. The Pages workflow builds changes on `develop` and pull requests to `master`, and deploys `master` to GitHub Pages.
+The production address is [augarte.github.io](https://augarte.github.io/). GitHub Actions builds pull requests targeting `main` and deploys pushes to `main` to GitHub Pages.
 
 On GitHub Free, this repository must be public to serve the portfolio at that address.
