@@ -1,4 +1,5 @@
-# compiled output  
+# compiled output
+/.astro/
 /dist  
 /tmp  
 /out-tsc  

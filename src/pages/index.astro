@@ -1,0 +1,248 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { projects, experience, socials } from "../data/content";
+import "../styles/portfolio.css";
+---
+
+<Layout
+  title="Aimar Ugarte — iOS Engineer"
+  description="Aimar Ugarte, iOS engineer. Selected projects and experience building native mobile apps."
+>
+  <Fragment slot="head">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@96,800&amp;display=swap&amp;text=AIMRUGTE"
+    />
+  </Fragment>
+
+  <div class="portfolio">
+    <a class="portfolio-skip" href="#projects">Skip to work</a>
+
+    <header class="portfolio-header" data-portfolio-header>
+      <nav class="portfolio-nav" aria-label="Portfolio">
+        <a class="chapter-counter" href="#intro" aria-label="Introduction" aria-current="location">
+          <span data-chapter-number>01</span><span class="chapter-total"> / 04</span>
+        </a>
+        <div class="portfolio-nav-links">
+          <a href="#projects">Work</a>
+          <a href="#experience">Experience</a>
+          <a href="#contact">Contact</a>
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <section class="chapter chapter-intro" id="intro" data-chapter aria-labelledby="portfolio-name">
+        <h1 id="portfolio-name"><span>AIMAR</span> <span>UGARTE</span></h1>
+        <a class="chapter-link intro-link" href="#projects">
+          Explore projects <span aria-hidden="true">↓</span>
+        </a>
+      </section>
+
+      <section class="chapter chapter-work" id="projects" data-chapter data-dark aria-labelledby="work-title">
+        <div class="chapter-inner">
+          <p class="chapter-label">02 / Work</p>
+          <h2 class="chapter-title" id="work-title">What I build.</h2>
+
+          {projects.map((project, index) => (
+            <article
+              class="featured-project"
+              id={`project-${project.id}`}
+              aria-labelledby={`project-title-${project.id}`}
+              hidden={index !== 0}
+            >
+              <div class="feature-copy">
+                <p class="chapter-label">{project.category}</p>
+                <h3 id={`project-title-${project.id}`} tabindex="-1">{project.title}</h3>
+                <p class="feature-description">{project.description}</p>
+                {project.note && <p class="feature-note">{project.note}</p>}
+              </div>
+              <figure>
+                <div class="feature-art">
+                  <img
+                    src={project.screenshot.src}
+                    alt={project.screenshot.alt}
+                    width={project.screenshot.width}
+                    height={project.screenshot.height}
+                    data-crop={project.screenshot.crop}
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </div>
+                <figcaption class="feature-caption">{project.screenshot.caption}</figcaption>
+              </figure>
+            </article>
+          ))}
+
+          <ul class="project-picker" role="list" aria-label="Projects">
+            {projects.map((project, index) => (
+              <li>
+                <button
+                  type="button"
+                  aria-controls={`project-${project.id}`}
+                  aria-pressed={index === 0}
+                  aria-labelledby={`project-choice-${project.id}`}
+                  aria-describedby={`project-summary-${project.id}`}
+                >
+                  <span class="project-picker-title" id={`project-choice-${project.id}`}>{project.title}</span>
+                  <span id={`project-summary-${project.id}`}>
+                    <span class="project-picker-summary">{project.summary}</span>
+                    <span class="project-picker-tags">
+                      {project.tags.map((tag) => <span>{tag}</span>)}
+                    </span>
+                  </span>
+                </button>
+                {project.href && (
+                  <a class="chapter-link" href={project.href} aria-label={`View ${project.title} on GitHub`}>
+                    GitHub <span aria-hidden="true">↗</span>
+                  </a>
+                )}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      <section class="chapter chapter-experience" id="experience" data-chapter aria-labelledby="experience-title">
+        <div class="chapter-inner">
+          <div class="experience-intro" id="about">
+            <p class="chapter-label">03 / Experience</p>
+            <h2 class="chapter-title" id="experience-title">From idea<br />to app.</h2>
+            <p class="chapter-lead">
+              I’m an iOS engineer working on native apps and the architecture behind them.
+              Much of my work has been on retail apps that ship every week.
+            </p>
+          </div>
+
+          <div class="experience-history">
+            {experience.map((job) => (
+              <details class="experience-entry">
+                <summary>
+                  <span>
+                    <span class="experience-company">{job.company}</span>
+                    <span class="experience-role">{job.roles[0].title}</span>
+                  </span>
+                  <span class="experience-period">{job.period}</span>
+                </summary>
+                <div class="experience-detail">
+                  <p class="chapter-label">{job.location}</p>
+                  {job.roles.map((role) => (
+                    <div class="experience-role-detail">
+                      <h3>{role.title}</h3>
+                      <p class="experience-role-meta">{role.period} · {role.type}</p>
+                      <p>{role.description}</p>
+                      <ul>
+                        {role.highlights.map((highlight) => <li>{highlight}</li>)}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+              </details>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section class="chapter chapter-contact" id="contact" data-chapter data-dark aria-labelledby="contact-title">
+        <div class="chapter-inner">
+          <p class="chapter-label">04 / Contact</p>
+          <h2 class="chapter-title" id="contact-title">Let’s talk.</h2>
+          <p class="chapter-lead">Open to iOS consulting, feature ownership, and long-term product collaborations.</p>
+          <a class="contact-email" href={`mailto:${socials.email}?subject=iOS%20Project%20Inquiry`}>{socials.email}</a>
+          <div class="contact-links">
+            <a class="chapter-link" href={socials.github}>GitHub <span aria-hidden="true">↗</span></a>
+            <a class="chapter-link" href={socials.linkedin}>LinkedIn <span aria-hidden="true">↗</span></a>
+            <button class="chapter-link" type="button" data-copy-email={socials.email} hidden>Copy email</button>
+            <span class="visually-hidden" role="status" data-copy-status></span>
+          </div>
+        </div>
+        <footer class="portfolio-footer">
+          <div class="footer-brand">
+            <img src="/wordmark.svg" alt="Aimar Ugarte" width="339" height="146" />
+            <span>© {new Date().getFullYear()}</span>
+          </div>
+          <a class="chapter-link" href="#intro">Back to top <span aria-hidden="true">↑</span></a>
+        </footer>
+      </section>
+    </main>
+  </div>
+</Layout>
+
+<script>
+  const header = document.querySelector<HTMLElement>("[data-portfolio-header]");
+  const counter = document.querySelector<HTMLElement>("[data-chapter-number]");
+  const navLinks = Array.from(document.querySelectorAll<HTMLAnchorElement>(".portfolio-nav a"));
+  const chapters = Array.from(document.querySelectorAll<HTMLElement>("[data-chapter]"));
+
+  if (header && counter) {
+    let activeChapter: HTMLElement | undefined;
+    let frame = 0;
+
+    const updateNavigation = () => {
+      frame = 0;
+      const headerEdge = header.getBoundingClientRect().bottom + 1;
+      const chapter = chapters.find((section) => section.getBoundingClientRect().bottom > headerEdge);
+      if (!chapter || chapter === activeChapter) return;
+
+      activeChapter = chapter;
+      header.toggleAttribute("data-dark", chapter.hasAttribute("data-dark"));
+      counter.textContent = String(chapters.indexOf(chapter) + 1).padStart(2, "0");
+      for (const link of navLinks) {
+        if (link.hash === `#${chapter.id}`) {
+          link.setAttribute("aria-current", "location");
+        } else {
+          link.removeAttribute("aria-current");
+        }
+      }
+    };
+
+    const scheduleUpdate = () => {
+      if (!frame) frame = requestAnimationFrame(updateNavigation);
+    };
+
+    updateNavigation();
+    window.addEventListener("scroll", scheduleUpdate, { passive: true });
+    window.addEventListener("resize", scheduleUpdate);
+  }
+
+  const projectButtons = document.querySelectorAll<HTMLButtonElement>(".project-picker button");
+  for (const button of projectButtons) {
+    button.addEventListener("click", () => {
+      for (const choice of projectButtons) {
+        const selected = choice === button;
+        choice.setAttribute("aria-pressed", String(selected));
+        const panel = document.getElementById(choice.getAttribute("aria-controls") ?? "");
+        panel?.toggleAttribute("hidden", !selected);
+      }
+
+      const panel = document.getElementById(button.getAttribute("aria-controls") ?? "");
+      const heading = panel?.querySelector("h3");
+      const headerBottom = header?.getBoundingClientRect().bottom ?? 0;
+      if (heading && heading.getBoundingClientRect().top < headerBottom) {
+        heading.focus({ preventScroll: true });
+        heading.scrollIntoView({ block: "start" });
+      }
+    });
+  }
+
+  const copyButton = document.querySelector<HTMLButtonElement>("[data-copy-email]");
+  const copyStatus = document.querySelector<HTMLElement>("[data-copy-status]");
+
+  if (navigator.clipboard && copyButton && copyStatus) {
+    const email = copyButton.dataset.copyEmail;
+    if (email) {
+      copyButton.hidden = false;
+      copyButton.addEventListener("click", async () => {
+        try {
+          await navigator.clipboard.writeText(email);
+          copyButton.textContent = "Copied";
+          copyStatus.textContent = "Email address copied.";
+        } catch {
+          copyStatus.textContent = "Could not copy the email address.";
+        }
+      });
+    }
+  }
+</script>

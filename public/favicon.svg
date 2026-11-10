@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <title>Aimar Ugarte</title>
+  <style>
+    .tile { fill: #141414; }
+    .initials { fill: #fcfcfa; }
+    @media (prefers-color-scheme: dark) {
+      .tile { fill: #fcfcfa; }
+      .initials { fill: #141414; }
+    }
+  </style>
+  <defs><clipPath id="tile"><rect width="64" height="64" rx="7"/></clipPath></defs>
+  <rect class="tile" width="64" height="64" rx="7"/>
+  <g clip-path="url(#tile)">
+    <path class="initials" transform="translate(-1.79 66.34) scale(0.47 -0.47)" d="M0.40 0.00 L22.50 66.00 L43.50 66.00 L65.50 0.00 L48.00 0.00 L33.20 52.90 L32.60 52.90 L17.70 0.00 Z M12.90 11.70 L12.90 23.10 L55.00 23.10 L55.00 11.70 Z M91.60 -1.40 Q85.90 -1.40 81.40 -0.10 Q76.90 1.20 73.65 3.60 Q70.40 6.00 68.25 9.35 Q66.10 12.70 65.05 16.90 Q64.00 21.10 64.00 26.00 L64.00 66.00 L80.20 66.00 L80.20 26.80 Q80.20 21.70 81.70 18.65 Q83.20 15.60 85.75 14.30 Q88.30 13.00 91.60 13.00 Q95.00 13.00 97.55 14.30 Q100.10 15.60 101.60 18.60 Q103.10 21.60 103.10 26.80 L103.10 66.00 L119.30 66.00 L119.30 26.00 Q119.30 13.00 112.30 5.80 Q105.30 -1.40 91.60 -1.40 Z"/>
+  </g>
+</svg>

@@ -1,27 +1,26 @@
-# Augarte
+# Aimar Ugarte’s portfolio
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 10.0.5.
+A personal site for Aimar Ugarte, an iOS engineer. Built with Astro and Tailwind CSS.
 
-## Development server
+## Local development
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+Use Node.js 24 and npm.
 
-## Code scaffolding
+```sh
+npm ci
+npm run dev
+```
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+Run `npm run build` to generate the static site in `dist/`. Run `npm run preview` to inspect that build locally.
 
-## Build
+## Site content and brand
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+- Edit project descriptions, repository links, and experience in `src/data/content.ts`.
+- Keep project screenshots in `public/` and provide descriptive alt text.
+- `public/wordmark.svg` is the full stacked logo. `public/favicon.svg` is the cropped tile, with an ICO fallback for smaller browser icons. `public/social-preview.png` uses the wordmark for link previews.
 
-## Running unit tests
+## Publishing
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+The production address is [augarte.github.io](https://augarte.github.io/). In the repository’s **Settings → Pages**, set the source to **GitHub Actions** before releasing the Astro version. The Pages workflow builds changes on `develop` and pull requests to `master`, and deploys `master` to GitHub Pages.
 
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+On GitHub Free, this repository must be public to serve the portfolio at that address.
