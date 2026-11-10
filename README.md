@@ -24,3 +24,7 @@ Run `npm run build` to generate the static site in `dist/`. Run `npm run preview
 The production address is [augarte.github.io](https://augarte.github.io/). GitHub Actions builds pull requests targeting `main` and deploys pushes to `main` to GitHub Pages.
 
 On GitHub Free, this repository must be public to serve the portfolio at that address.
+
+## License
+
+The site source code is available under the [MIT License](LICENSE). Portfolio copy, screenshots, and branding are excluded from that license. Third-party assets retain their respective licenses.
