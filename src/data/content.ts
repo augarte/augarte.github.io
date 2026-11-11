@@ -42,7 +42,7 @@ export const projects: Project[] = [
     id: "breezepilot",
     title: "BreezePilot",
     summary: "Control your AC from your iPhone’s Home Screen.",
-    tags: ["Open source", "SwiftUI", "WidgetKit"],
+    tags: ["SwiftUI", "WidgetKit"],
     description:
       "Turn your AC on or off, set the temperature, and adjust the fan right from your iPhone’s Home Screen.",
     note: "Works with compatible Daikin and Xiaomi/Mijia units over home Wi-Fi.",
@@ -60,7 +60,7 @@ export const projects: Project[] = [
     id: "simple-line-chart",
     title: "Simple Line Chart",
     summary: "UIKit line charts with custom styling and time-range filters.",
-    tags: ["Open source", "UIKit"],
+    tags: ["UIKit"],
     description:
       "A lightweight UIKit chart library with customizable styling, multiple datasets, and time-range filters.",
     note: "Customize the lines, points, and background. Install it with Swift Package Manager or CocoaPods.",
@@ -143,16 +143,21 @@ export const experience: Experience[] = [
   },
 ];
 
-export const skills = [
-  "Swift",
-  "SwiftUI",
-  "UIKit",
-  "Concurrency",
-  "Architecture",
-] as const;
+export const hero = {
+  role: "iOS engineer / Bilbao",
+} as const;
+
+export const bio = {
+  title: "Hey, I’m Aimar.",
+  paragraphs: [
+    "iOS engineer from Bilbao, building apps and exploring the world. I care about good design, clean code, and creating software that people genuinely enjoy using.",
+  ],
+} as const;
 
 export const socials = {
   github: "https://github.com/augarte",
   linkedin: "https://www.linkedin.com/in/aimarugarte/",
-  email: "ugarteaimar@gmail.com",
 } as const;
+
+// Kept split so the address never appears as one string in the built HTML or JS.
+export const emailParts = { user: "ugarteaimar", domain: "gmail.com" } as const;

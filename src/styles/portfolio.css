@@ -2,11 +2,32 @@
   --portfolio-paper: #fcfcfa;
   --portfolio-ink: #141414;
   --page-inset: clamp(1rem, 4.25vw, 4.75rem);
+  --inset-left: max(var(--page-inset), env(safe-area-inset-left, 0px));
+  --inset-right: max(var(--page-inset), env(safe-area-inset-right, 0px));
   --nav-height: calc(3.75rem + env(safe-area-inset-top, 0px));
+  --wave: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 5'%3E%3Cpath d='M0 2.5C3.33 .2 6.67 .2 10 2.5S16.67 4.8 20 2.5' fill='none' stroke='black' stroke-width='1.35'/%3E%3C/svg%3E");
 }
 
-body:has(.portfolio)::before {
-  content: none;
+/* Everything but the hero name is sized in rem, so scaling the root font keeps the chapters in step with the window. */
+@media (min-width: 90rem) {
+  html:has(.portfolio) {
+    font-size: clamp(16px, min(1.1vw, 2.2vh), 28px);
+  }
+}
+
+@media (min-width: 48rem) and (max-height: 45rem) {
+  html:has(.portfolio) {
+    font-size: clamp(12px, 2vh, 16px);
+  }
+}
+
+/* Safari paints this colour under its toolbar and in the overscroll bounce; the script follows the current chapter. */
+html:has(.portfolio) {
+  background: var(--portfolio-paper);
+}
+
+html:has(.chapter-notfound) {
+  background: var(--portfolio-ink);
 }
 
 .portfolio {
@@ -30,7 +51,7 @@ body:has(.portfolio)::before {
   position: fixed;
   z-index: 20;
   top: 0.5rem;
-  left: var(--page-inset);
+  left: var(--inset-left);
   padding: 0.65rem 1rem;
   color: var(--portfolio-ink);
   background: var(--portfolio-paper);
@@ -45,7 +66,7 @@ body:has(.portfolio)::before {
   position: fixed;
   z-index: 10;
   inset: 0 0 auto;
-  padding: env(safe-area-inset-top, 0px) var(--page-inset) 0;
+  padding: env(safe-area-inset-top, 0px) var(--inset-right) 0 var(--inset-left);
   background: var(--surface);
   color: var(--type);
 }
@@ -75,13 +96,22 @@ body:has(.portfolio)::before {
   text-underline-offset: 0.32em;
 }
 
-.portfolio-nav a:is(:hover, :focus-visible),
+.portfolio-nav a:is(:focus-visible, :active),
 .portfolio-nav-links a[aria-current="location"],
-button.chapter-link:is(:hover, :focus-visible),
-.project-entry summary:is(:hover, :focus-visible) .project-title,
+button.chapter-link:is(:focus-visible, :active),
+.project-entry summary:is(:focus-visible, :active) .project-title,
 .project-entry[open] .project-title,
-.experience-entry summary:is(:hover, :focus-visible) .experience-company {
+.experience-entry summary:is(:focus-visible, :active) .experience-company {
   text-decoration: underline solid 1px;
+}
+
+@media (hover: hover) {
+  .portfolio-nav a:hover,
+  button.chapter-link:hover,
+  .project-entry summary:hover .project-title,
+  .experience-entry summary:hover .experience-company {
+    text-decoration: underline solid 1px;
+  }
 }
 
 .chapter-counter {
@@ -95,11 +125,13 @@ button.chapter-link:is(:hover, :focus-visible),
 }
 
 .chapter {
+  --hero-extra: 0px;
+  --hero-extra: calc(max(0px, calc(100lvh - 100svh)) + var(--bar-ext, 0px));
   display: grid;
   align-content: start;
   min-height: 100vh;
-  min-height: 100svh;
-  padding: calc(var(--nav-height) + clamp(1rem, 3svh, 2rem)) var(--page-inset) clamp(3rem, 6vw, 6rem);
+  min-height: calc(100svh + var(--hero-extra));
+  padding: calc(var(--nav-height) + clamp(1rem, 3svh, 2rem)) var(--inset-right) clamp(3rem, 6vw, 6rem) var(--inset-left);
   background: var(--surface);
   color: var(--type);
 }
@@ -110,16 +142,24 @@ button.chapter-link:is(:hover, :focus-visible),
 }
 
 .chapter-intro {
+  --name-size: min(25.5vw, 54svh);
   position: relative;
   overflow: clip;
   padding: 0;
 }
 
+/* Safari on iOS renders page content under its bottom toolbar, beyond even the large viewport. */
+@supports (-webkit-touch-callout: none) {
+  .chapter {
+    --bar-ext: 4rem;
+  }
+}
+
 .chapter-intro h1 {
   position: absolute;
-  inset: auto auto -0.07em -0.045em;
+  inset: auto auto calc(var(--hero-extra) - 0.07em) -0.045em;
   font-family: "Bricolage Grotesque", "Helvetica Neue", Arial, sans-serif;
-  font-size: min(25.5vw, 54svh);
+  font-size: var(--name-size);
   font-weight: 800;
   line-height: 0.77;
   letter-spacing: -0.025em;
@@ -133,8 +173,18 @@ button.chapter-link:is(:hover, :focus-visible),
   --arrow-x: 0px;
   --arrow-y: 2px;
   position: absolute;
-  top: calc(var(--nav-height) + 0.85rem);
-  right: var(--page-inset);
+  bottom: calc(var(--name-size) * 1.5 + 0.35rem + var(--hero-extra));
+  right: var(--inset-right);
+}
+
+.intro-meta {
+  position: absolute;
+  inset-inline: var(--inset-left) var(--inset-right);
+  top: calc(var(--nav-height) + 1rem);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.25rem 1.5rem;
 }
 
 .chapter-link > span[aria-hidden="true"] {
@@ -262,13 +312,20 @@ button.chapter-link:is(:hover, :focus-visible),
   line-height: 1.4;
 }
 
-.project-entry summary:is(:hover, :focus-visible),
+.project-entry summary:is(:focus-visible, :active),
 .project-entry[open] summary {
   color: var(--type);
 }
 
-.project-entry summary:is(:hover, :focus-visible) {
+.project-entry summary:is(:focus-visible, :active) {
   background-color: color-mix(in srgb, var(--type) 6%, transparent);
+}
+
+@media (hover: hover) {
+  .project-entry summary:hover {
+    color: var(--type);
+    background-color: color-mix(in srgb, var(--type) 6%, transparent);
+  }
 }
 
 .project-repo {
@@ -474,21 +531,26 @@ button.chapter-link:is(:hover, :focus-visible),
   margin-top: 0.35rem;
 }
 
-.chapter-contact {
+.chapter-contact,
+.chapter-notfound {
+  --hero-extra: 0px;
+  min-height: 100svh;
   grid-template-rows: auto 1fr auto;
   row-gap: clamp(1.25rem, 3svh, 2rem);
   padding-block-end: env(safe-area-inset-bottom, 0px);
 }
 
-.chapter-contact .chapter-inner {
+.chapter-contact .chapter-inner,
+.chapter-notfound .chapter-inner {
   align-self: center;
 }
 
-.chapter-contact .chapter-title {
+.chapter-contact .chapter-title,
+.chapter-notfound .chapter-title {
   margin-top: 0;
 }
 
-.contact-email {
+.display-link {
   position: relative;
   display: inline-block;
   max-width: 100%;
@@ -499,15 +561,26 @@ button.chapter-link:is(:hover, :focus-visible),
   overflow-wrap: anywhere;
 }
 
-.contact-email:is(:hover, :focus-visible)::after {
+.display-link::after {
   content: "";
   position: absolute;
   inset-inline: 0;
   bottom: 0.08em;
   height: 5px;
   background: currentColor;
-  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 5'%3E%3Cpath d='M0 2.5C3.33 .2 6.67 .2 10 2.5S16.67 4.8 20 2.5' fill='none' stroke='black' stroke-width='1.35'/%3E%3C/svg%3E") left center / 20px 5px repeat-x;
+  mask: var(--wave) left center / 20px 5px repeat-x;
+  opacity: 0;
   pointer-events: none;
+}
+
+.display-link:is(:focus-visible, :active)::after {
+  opacity: 1;
+}
+
+@media (hover: hover) {
+  .display-link:hover::after {
+    opacity: 1;
+  }
 }
 
 .contact-links {
@@ -541,13 +614,116 @@ button.chapter-link:is(:hover, :focus-visible),
   --arrow-x: 0px;
 }
 
+.bio-trigger {
+  display: inline-flex;
+  min-height: 2.75rem;
+  align-items: center;
+  cursor: pointer;
+}
+
+.bio-trigger-text {
+  position: relative;
+  padding-bottom: 0.45rem;
+}
+
+.bio-trigger-text::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  height: 5px;
+  background: currentColor;
+  mask: var(--wave) left center / 20px 5px repeat-x;
+  opacity: 0;
+}
+
+.bio-trigger:is(:focus-visible, :active) .bio-trigger-text::after {
+  opacity: 1;
+}
+
+@media (hover: hover) {
+  .bio-trigger:hover .bio-trigger-text::after {
+    opacity: 1;
+  }
+}
+
+html:has(.bio-dialog[open]) {
+  overflow: hidden;
+}
+
+.bio-dialog {
+  --surface: var(--portfolio-paper);
+  --type: var(--portfolio-ink);
+  width: min(32rem, calc(100% - 2rem));
+  max-height: calc(100svh - 2rem);
+  margin: auto;
+  padding: clamp(1.25rem, 4vw, 2rem);
+  overflow: auto;
+  border: 0;
+  background: var(--surface);
+  color: var(--type);
+}
+
+.bio-dialog:focus-visible {
+  outline: none;
+}
+
+.bio-dialog::backdrop {
+  background: color-mix(in srgb, var(--portfolio-ink) 70%, transparent);
+}
+
+.bio-title {
+  margin-top: 0.3em;
+  font-size: clamp(2rem, 7vw, 3rem);
+  font-weight: 700;
+  line-height: 0.95;
+  letter-spacing: -0.06em;
+}
+
+.bio-text {
+  margin-top: 1rem;
+  font-size: 1.05rem;
+  line-height: 1.5;
+  text-wrap: pretty;
+}
+
+.bio-close {
+  margin-top: 1.25rem;
+  margin-bottom: -0.5rem;
+  cursor: pointer;
+}
+
 @media (prefers-reduced-motion: no-preference) {
+  .bio-dialog,
+  .bio-dialog::backdrop {
+    transition: opacity 160ms ease-out, display 160ms allow-discrete, overlay 160ms allow-discrete;
+    opacity: 0;
+  }
+
+  .bio-dialog[open],
+  .bio-dialog[open]::backdrop {
+    opacity: 1;
+  }
+
+  @starting-style {
+    .bio-dialog[open],
+    .bio-dialog[open]::backdrop {
+      opacity: 0;
+    }
+  }
+
   .chapter-link > span[aria-hidden="true"] {
     transition: transform 140ms ease-out;
   }
 
-  .chapter-link:is(:hover, :focus-visible) > span[aria-hidden="true"] {
+  .chapter-link:is(:focus-visible, :active) > span[aria-hidden="true"] {
     transform: translate(var(--arrow-x, 2px), var(--arrow-y, -2px));
+  }
+
+  @media (hover: hover) {
+    .chapter-link:hover > span[aria-hidden="true"] {
+      transform: translate(var(--arrow-x, 2px), var(--arrow-y, -2px));
+    }
   }
 
   .project-entry summary {
@@ -619,6 +795,37 @@ button.chapter-link:is(:hover, :focus-visible),
     grid-row: 2;
     grid-column: 1 / -1;
   }
+
+  .intro-meta span:last-child {
+    display: none;
+  }
+
+  .project-detail {
+    gap: 1rem;
+  }
+
+  .project-note {
+    font-size: 0.875rem;
+  }
+
+  .project-art {
+    --art-width: 10.5rem;
+    padding: 0.75rem;
+  }
+
+  .project-caption {
+    display: none;
+  }
+}
+
+@media (max-width: 36rem) {
+  .work-contributions li {
+    padding-block: 0.35rem;
+  }
+
+  .work-contributions span {
+    display: none;
+  }
 }
 
 @media (max-width: 32rem) {
@@ -651,5 +858,26 @@ button.chapter-link:is(:hover, :focus-visible),
 @media (prefers-reduced-motion: reduce) {
   html:has(.portfolio) {
     scroll-behavior: auto;
+  }
+}
+
+.bio-dialog .bio-close:is(:hover, :focus-visible, :active) {
+  text-decoration: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .bio-dialog .bio-close > span[aria-hidden="true"] {
+    transform: translateY(-2px) scale(1.25);
+    transition: transform 160ms ease-out;
+  }
+
+  .bio-dialog .bio-close:is(:focus-visible, :active) > span[aria-hidden="true"] {
+    transform: none;
+  }
+
+  @media (hover: hover) {
+    .bio-dialog .bio-close:hover > span[aria-hidden="true"] {
+      transform: none;
+    }
   }
 }

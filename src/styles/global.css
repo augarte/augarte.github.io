@@ -1,101 +1,82 @@
-@import "tailwindcss";
-
-@theme {
-  --color-background: oklch(0.25 0.02 260);
-  --color-foreground: oklch(0.95 0 0);
-  --color-card: oklch(0.28 0.02 260);
-  --color-card-foreground: oklch(0.95 0 0);
-  --color-muted: oklch(0.32 0.02 260);
-  --color-muted-foreground: oklch(0.62 0.01 260);
-  --color-border: oklch(0.35 0.02 260);
-  --color-accent: oklch(0.75 0.15 55);
-  --color-accent-foreground: oklch(0.2 0.02 260);
-
+:root {
   --font-sans: "Geist", "Inter", system-ui, -apple-system, sans-serif;
   --font-mono: "Geist Mono", "SF Mono", "Fira Code", monospace;
 }
 
-/* Light mode overrides — html.light beats :root specificity */
-html.light {
-  --color-background: oklch(0.97 0.005 260) !important;
-  --color-foreground: oklch(0.2 0.02 260) !important;
-  --color-card: oklch(1 0.003 260) !important;
-  --color-card-foreground: oklch(0.2 0.02 260) !important;
-  --color-muted: oklch(0.94 0.008 260) !important;
-  --color-muted-foreground: oklch(0.45 0.02 260) !important;
-  --color-border: oklch(0.88 0.01 260) !important;
-  --color-accent: oklch(0.55 0.15 55) !important;
-  --color-accent-foreground: oklch(0.98 0 0) !important;
+*,
+::before,
+::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  border: 0 solid;
 }
 
-@layer base {
-  html {
-    scroll-behavior: smooth;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-
-  body {
-    font-family: var(--font-sans);
-    background-color: var(--color-background);
-    color: var(--color-foreground);
-    overflow-x: hidden;
-  }
-
-  body::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    z-index: 9999;
-    pointer-events: none;
-    opacity: 0.08;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-    background-repeat: repeat;
-    background-size: 256px 256px;
-    will-change: transform;
-  }
+html {
+  scroll-behavior: smooth;
+  line-height: 1.5;
+  font-family: var(--font-sans);
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* Disable all transitions during theme switch, except theme toggle icons */
-html.no-transitions *:not(#sun-icon):not(#moon-icon),
-html.no-transitions *:not(#sun-icon):not(#moon-icon)::before,
-html.no-transitions *:not(#sun-icon):not(#moon-icon)::after {
-  transition-duration: 0s !important;
+body {
+  font-family: var(--font-sans);
+  overflow-x: hidden;
 }
 
-@utility container {
-  margin-inline: auto;
-  padding-inline: 1.5rem;
-  max-width: 56rem;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-size: inherit;
+  font-weight: inherit;
 }
 
-/* Glow effect on project cards */
-[data-glow-card] {
-  --glow-x: 50%;
-  --glow-y: 50%;
+a {
+  color: inherit;
+  text-decoration: inherit;
 }
 
-[data-glow-card]::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  opacity: 0;
-  transition: opacity 0.3s;
-  background: radial-gradient(
-    300px circle at var(--glow-x) var(--glow-y),
-    var(--color-accent) 0%,
-    transparent 70%
-  );
-  mix-blend-mode: soft-light;
-  pointer-events: none;
+strong {
+  font-weight: bolder;
 }
 
-[data-glow-card]:hover::after {
-  opacity: 0.15;
+ul,
+ol {
+  list-style: none;
 }
 
-/* Geist font */
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+img {
+  height: auto;
+}
+
+button {
+  border-radius: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+}
+
+summary {
+  display: list-item;
+}
+
+[hidden] {
+  display: none !important;
+}
+
 @font-face {
   font-family: "Geist";
   src: url("https://cdn.jsdelivr.net/npm/geist@1.3.1/dist/fonts/geist-sans/Geist-Regular.woff2") format("woff2");

@@ -1,6 +1,6 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import { appContributions, projects, experience, socials } from "../data/content";
+import { appContributions, projects, experience, socials, hero, bio, emailParts } from "../data/content";
 import "../styles/portfolio.css";
 ---
 
@@ -39,6 +39,10 @@ import "../styles/portfolio.css";
         <a class="chapter-link intro-link" href="#projects">
           Explore projects <span aria-hidden="true">↓</span>
         </a>
+        <p class="intro-meta chapter-label">
+          <span>{hero.role}</span>
+          <span>{appContributions.map((app) => app.name).join(" · ")}</span>
+        </p>
       </section>
 
       <section class="chapter chapter-work" id="projects" data-chapter data-dark aria-labelledby="work-title">
@@ -106,6 +110,11 @@ import "../styles/portfolio.css";
               </li>
             ))}
           </ul>
+          <script is:inline>
+            if (matchMedia("(max-width: 47.99rem)").matches) {
+              document.querySelectorAll(".project-entry[open]").forEach((entry) => entry.removeAttribute("open"));
+            }
+          </script>
         </div>
       </section>
 
@@ -113,7 +122,7 @@ import "../styles/portfolio.css";
         <div class="chapter-inner">
           <div class="experience-intro" id="about">
             <p class="chapter-label">03 / Experience</p>
-            <h2 class="chapter-title" id="experience-title">From idea<br />to app.</h2>
+            <h2 class="chapter-title" id="experience-title">From idea <br />to app.</h2>
             <p class="chapter-lead">
               I’m an iOS engineer who builds apps that stay easy to extend as they grow.
               I’ve shipped features across Inditex’s retail apps, which serve millions of shoppers.
@@ -157,25 +166,38 @@ import "../styles/portfolio.css";
         <div class="chapter-inner">
           <h2 class="chapter-title" id="contact-title">Let’s talk.</h2>
           <p class="chapter-lead">Need a hand? I can help you build something new or improve what’s already there.</p>
-          <a class="contact-email" href={`mailto:${socials.email}?subject=iOS%20Project%20Inquiry`}>{socials.email}</a>
+          <a class="display-link" data-email-link data-user={emailParts.user} data-domain={emailParts.domain} href={socials.linkedin} hidden></a>
+          <noscript><a class="display-link" href={socials.linkedin}>Message me on LinkedIn</a></noscript>
           <div class="contact-links">
             <a class="chapter-link" href={socials.github}>GitHub <span aria-hidden="true">↗</span></a>
             <a class="chapter-link" href={socials.linkedin}>LinkedIn <span aria-hidden="true">↗</span></a>
-            <button class="chapter-link" type="button" data-copy-email={socials.email} hidden>Copy email</button>
+            <button class="chapter-link" type="button" data-copy-email hidden>Copy email</button>
             <span class="visually-hidden" role="status" data-copy-status></span>
           </div>
         </div>
         <footer class="portfolio-footer">
-          <span class="chapter-label">Aimar Ugarte</span>
+          <span class="chapter-label" data-bio-fallback>Aimar Ugarte</span>
+          <button class="chapter-label bio-trigger" type="button" data-bio-open aria-haspopup="dialog" hidden>
+            <span class="bio-trigger-text">Aimar Ugarte</span>
+          </button>
           <a class="chapter-link" href="#intro">Back to top <span aria-hidden="true">↑</span></a>
         </footer>
+        <dialog class="bio-dialog" id="bio" aria-labelledby="bio-title" data-bio-dialog tabindex="-1">
+          <p class="chapter-label">About</p>
+          <h2 class="bio-title" id="bio-title">{bio.title}</h2>
+          {bio.paragraphs.map((paragraph) => <p class="bio-text">{paragraph}</p>)}
+          <button class="chapter-link bio-close" type="button" data-bio-close>Close <span aria-hidden="true">×</span></button>
+        </dialog>
       </section>
     </main>
   </div>
 </Layout>
 
 <script>
+  document.addEventListener("touchstart", () => {}, { passive: true });
+
   const header = document.querySelector<HTMLElement>("[data-portfolio-header]");
+  const themeColor = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]');
   const counter = document.querySelector<HTMLElement>("[data-chapter-number]");
   const navLinks = Array.from(document.querySelectorAll<HTMLAnchorElement>(".portfolio-nav a"));
   const chapters = Array.from(document.querySelectorAll<HTMLElement>("[data-chapter]"));
@@ -191,7 +213,11 @@ import "../styles/portfolio.css";
       if (!chapter || chapter === activeChapter) return;
 
       activeChapter = chapter;
-      header.toggleAttribute("data-dark", chapter.hasAttribute("data-dark"));
+      const isDark = chapter.hasAttribute("data-dark");
+      header.toggleAttribute("data-dark", isDark);
+      const surface = isDark ? "#141414" : "#fcfcfa";
+      themeColor?.setAttribute("content", surface);
+      document.documentElement.style.backgroundColor = surface;
       counter.textContent = String(chapters.indexOf(chapter) + 1).padStart(2, "0");
       for (const link of navLinks) {
         if (link.hash === `#${chapter.id}`) {
@@ -211,12 +237,38 @@ import "../styles/portfolio.css";
     window.addEventListener("resize", scheduleUpdate);
   }
 
+  const bioDialog = document.querySelector<HTMLDialogElement>("[data-bio-dialog]");
+  const bioOpen = document.querySelector<HTMLButtonElement>("[data-bio-open]");
+  const bioFallback = document.querySelector<HTMLElement>("[data-bio-fallback]");
+
+  if (bioDialog && bioOpen && bioFallback && typeof bioDialog.showModal === "function") {
+    bioFallback.hidden = true;
+    bioOpen.hidden = false;
+    const openBio = () => {
+      if (bioDialog.open) return;
+      bioDialog.showModal();
+      bioDialog.focus();
+    };
+    bioOpen.addEventListener("click", openBio);
+    bioDialog.querySelector("[data-bio-close]")?.addEventListener("click", () => bioDialog.close());
+    bioDialog.addEventListener("click", (event) => {
+      if (event.target === bioDialog) bioDialog.close();
+    });
+    if (location.hash === "#bio") openBio();
+  }
+
+  const emailLink = document.querySelector<HTMLAnchorElement>("[data-email-link]");
   const copyButton = document.querySelector<HTMLButtonElement>("[data-copy-email]");
   const copyStatus = document.querySelector<HTMLElement>("[data-copy-status]");
+  const { user, domain } = emailLink?.dataset ?? {};
 
-  if (navigator.clipboard && copyButton && copyStatus) {
-    const email = copyButton.dataset.copyEmail;
-    if (email) {
+  if (emailLink && user && domain) {
+    const email = `${user}@${domain}`;
+    emailLink.href = `mailto:${email}?subject=iOS%20Project%20Inquiry`;
+    emailLink.textContent = email;
+    emailLink.hidden = false;
+
+    if (navigator.clipboard && copyButton && copyStatus) {
       copyButton.hidden = false;
       copyButton.addEventListener("click", async () => {
         try {

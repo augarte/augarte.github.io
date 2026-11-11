@@ -1,36 +1,34 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import "../styles/portfolio.css";
 ---
 
 <Layout
-  title="404 — Page Not Found"
-  description="This page doesn't exist."
+  title="404 — Page not found"
+  description="This page doesn’t exist."
+  themeColor="#141414"
 >
-  <div class="container">
-    <main class="flex flex-col items-center justify-center min-h-[80vh] text-center">
-      <p class="text-sm font-mono text-accent mb-4">fatal error</p>
-      <h1 class="text-6xl sm:text-8xl font-bold tracking-tight mb-6">404</h1>
-      <div class="rounded-xl border border-border bg-card p-6 sm:p-8 max-w-md relative overflow-hidden">
-        <div class="absolute left-0 top-0 bottom-0 w-1 bg-accent rounded-l-xl"></div>
-        <div class="pl-4">
-          <p class="font-mono text-sm text-muted-foreground leading-relaxed mb-4">
-            <span class="text-accent">guard let</span> page = pages[path] <span class="text-accent">else</span> {
-          </p>
-          <p class="font-mono text-sm text-muted-foreground leading-relaxed pl-4 mb-4">
-            <span class="text-accent">return</span> .notFound
-          </p>
-          <p class="font-mono text-sm text-muted-foreground leading-relaxed mb-6">}</p>
-          <p class="text-muted-foreground leading-relaxed">
-            This view failed to load. Looks like the route you're looking for was never pushed to the navigation stack.
-          </p>
+  <div class="portfolio">
+    <header class="portfolio-header" data-dark>
+      <nav class="portfolio-nav" aria-label="Portfolio">
+        <a class="chapter-counter" href="/">Aimar Ugarte</a>
+        <div class="portfolio-nav-links">
+          <a href="/#projects">Work</a>
+          <a href="/#experience">Experience</a>
+          <a href="/#contact">Contact</a>
         </div>
-      </div>
-      <a
-        href="/"
-        class="mt-8 inline-flex items-center gap-2 rounded-lg bg-accent px-5 py-2.5 text-sm font-medium text-accent-foreground transition-all hover:opacity-90"
-      >
-        popToRootViewController()
-      </a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="chapter chapter-notfound" data-dark aria-labelledby="notfound-title">
+        <p class="chapter-inner chapter-label">Error / 404</p>
+        <div class="chapter-inner">
+          <h1 class="chapter-title" id="notfound-title">Page not found.</h1>
+          <p class="chapter-lead">This page doesn’t exist or has moved. The work and the way to reach me are still on the home page.</p>
+          <a class="display-link" href="/">Back to home</a>
+        </div>
+      </section>
     </main>
   </div>
 </Layout>
