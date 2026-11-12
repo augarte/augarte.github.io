@@ -1,0 +1,77 @@
+---
+import Layout from "../layouts/Layout.astro";
+import ThemeToggle from "../components/ThemeToggle.astro";
+import { projects, socials, emailParts, hero } from "../data/content";
+import "../styles/portfolio.css";
+
+const links = [
+  { title: "Portfolio", description: "Selected work and experience.", href: "/", arrow: "→" },
+  ...projects.flatMap((project) =>
+    project.href ? [{ title: project.title, description: project.summary, href: project.href, arrow: "↗" }] : [],
+  ),
+  { title: "GitHub", description: "Code and open source.", href: socials.github, arrow: "↗" },
+  { title: "LinkedIn", description: "Experience and contact.", href: socials.linkedin, arrow: "↗" },
+];
+---
+
+<Layout
+  title="Aimar Ugarte — Links"
+  description="Links to Aimar Ugarte’s portfolio, apps and open source projects."
+>
+  <Fragment slot="head">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@96,800&amp;display=swap&amp;text=AIMRUGTE"
+    />
+  </Fragment>
+
+  <div class="portfolio">
+    <header class="portfolio-header">
+      <nav class="portfolio-nav" aria-label="Links page">
+        <a class="chapter-counter" href="/">Home</a>
+        <ThemeToggle />
+      </nav>
+    </header>
+
+    <main class="chapter chapter-links" aria-labelledby="links-name">
+      <div class="links-column">
+        <p class="chapter-label">{hero.role}</p>
+        <h1 class="links-name" id="links-name"><span>AIMAR</span> <span>UGARTE</span></h1>
+
+        <ul class="link-list" role="list">
+          {links.map(({ title, description, href, arrow }) => (
+            <li>
+              <a class="link-row" href={href}>
+                <span class="link-title">{title}</span>
+                <span class="link-arrow" aria-hidden="true">{arrow}</span>
+                <span class="link-description">{description}</span>
+              </a>
+            </li>
+          ))}
+          <li hidden data-email-item>
+            <a class="link-row" data-email-link data-user={emailParts.user} data-domain={emailParts.domain} href="#">
+              <span class="link-title">Email</span>
+              <span class="link-arrow" aria-hidden="true">↗</span>
+              <span class="link-description">Say hello.</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </main>
+  </div>
+</Layout>
+
+<script>
+  document.addEventListener("touchstart", () => {}, { passive: true });
+
+  const emailLink = document.querySelector<HTMLAnchorElement>("[data-email-link]");
+  const emailItem = document.querySelector<HTMLElement>("[data-email-item]");
+  const { user, domain } = emailLink?.dataset ?? {};
+
+  if (emailLink && emailItem && user && domain) {
+    emailLink.href = `mailto:${user}@${domain}?subject=Hello`;
+    emailItem.hidden = false;
+  }
+</script>

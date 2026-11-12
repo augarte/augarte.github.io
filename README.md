@@ -16,6 +16,7 @@ Run `npm run build` to generate the static site in `dist/`. Run `npm run preview
 ## Site content and brand
 
 - Edit app contributions, project descriptions, repository links, and experience in `src/data/content.ts`.
+- `/links` (`src/pages/links.astro`) is a link-in-bio page. It lists every project with a repository link from `content.ts`, plus the portfolio, GitHub, LinkedIn and email.
 - Keep project screenshots in `public/` and provide descriptive alt text.
 - `public/favicon.svg` is the cropped logo tile, with an ICO fallback for smaller browser icons and `public/apple-touch-icon.png` for iOS home screens. `public/social-preview.png` is the image shown in link previews.
 

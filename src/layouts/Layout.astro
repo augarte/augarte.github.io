@@ -18,6 +18,19 @@ const socialImageURL = new URL("/social-preview.png", canonicalURL);
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="theme-color" content={themeColor} />
+    <script is:inline>
+      (function () {
+        var root = document.documentElement;
+        var theme = "light";
+        try {
+          var stored = localStorage.getItem("theme");
+          if (stored === "dark") theme = "dark";
+        } catch (e) {}
+        root.dataset.theme = theme;
+        var meta = document.querySelector('meta[name="theme-color"]');
+        if (theme === "dark" && meta && meta.content === "#fcfcfa") meta.content = "#1f1f1e";
+      })();
+    </script>
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="icon" href="/favicon.ico?v=3" sizes="16x16 32x32 48x48" />

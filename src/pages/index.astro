@@ -1,5 +1,6 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import ThemeToggle from "../components/ThemeToggle.astro";
 import { appContributions, projects, experience, socials, hero, bio, emailParts } from "../data/content";
 import "../styles/portfolio.css";
 ---
@@ -22,9 +23,12 @@ import "../styles/portfolio.css";
 
     <header class="portfolio-header" data-portfolio-header>
       <nav class="portfolio-nav" aria-label="Portfolio">
-        <a class="chapter-counter" href="#intro" aria-label="Introduction" aria-current="location">
-          <span data-chapter-number>01</span><span class="chapter-total"> / 04</span>
-        </a>
+        <div class="nav-start">
+          <a class="chapter-counter" href="#intro" aria-label="Introduction" aria-current="location">
+            <span data-chapter-number>01</span><span class="chapter-total"> / 04</span>
+          </a>
+          <ThemeToggle />
+        </div>
         <div class="portfolio-nav-links">
           <a href="#projects">Work</a>
           <a href="#experience">Experience</a>
@@ -215,7 +219,7 @@ import "../styles/portfolio.css";
       activeChapter = chapter;
       const isDark = chapter.hasAttribute("data-dark");
       header.toggleAttribute("data-dark", isDark);
-      const surface = isDark ? "#141414" : "#fcfcfa";
+      const surface = getComputedStyle(chapter).backgroundColor;
       themeColor?.setAttribute("content", surface);
       document.documentElement.style.backgroundColor = surface;
       counter.textContent = String(chapters.indexOf(chapter) + 1).padStart(2, "0");
@@ -233,6 +237,10 @@ import "../styles/portfolio.css";
     };
 
     updateNavigation();
+    window.addEventListener("themechange", () => {
+      activeChapter = undefined;
+      updateNavigation();
+    });
     window.addEventListener("scroll", scheduleUpdate, { passive: true });
     window.addEventListener("resize", scheduleUpdate);
   }
